@@ -1,0 +1,7 @@
+[haproxy]
+IP_Address  ansible_user=root  ansible_ssh_password=Your_Password ansible_connection=ssh
+
+[webservers]
+IP_Address  ansible_user=root  ansible_ssh_password=Your_Password ansible_connection=ssh
+IP_Address  ansible_user=root ansible_ssh_password=Your_Password ansible_connection=ssh
+

@@ -1,0 +1,44 @@
+---
+ - hosts: all
+   tasks:
+      - name: Stopping firewall in all the systems
+        shell: "systemctl stop firewalld"
+      - name: Stopping SELinux In all the systems please wait...
+        shell: "setenforce 0"
+ - hosts: webservers
+   tasks:
+      - name: installing httpd software
+        package:
+                name: "httpd"
+                state: present
+      - name: Installing php software
+        package:
+                name: "php"
+                state: present
+      - name: writing your specified content
+        copy:
+              dest: "/var/www/html/index.php"
+              content: "<pre>\n<?php\n\nprint `/usr/sbin/ifconfig`\n\n?>\n</pre>"
+      - name: Starting sevices
+        service:
+                name: "httpd"
+                state: restarted
+
+ - hosts: haproxy
+   vars:
+           x: "8080"
+   tasks: 
+      - name: Installing haproxy
+        package:
+                name: "haproxy"
+                state: present
+      - name: Configuring HAProxy 
+        template:
+                dest: "/etc/haproxy/haproxy.cfg"
+                src: "/haproxy.cfg.j2"
+      - name: "starting haproxy service on ip {{ ansible_facts['default_ipv4']['address'] }}:{{ x }}"
+        service:
+                name: "haproxy"
+                state: restarted
+        
+
